@@ -1,5 +1,7 @@
 import { Router } from "express";
 import { healthRouter } from "./HealthRouter";
+import { authRouter } from "./AuthRouter";
+import { authRateLimiter } from "../middleware/rateLimit";
 // import { authRouter } from "./authRoutes";
 // import { merchantRouter } from "./merchantRoutes";
 // import { transactionRouter } from "./transactionRoutes";
@@ -26,7 +28,7 @@ class MasterRouter {
     // Attach all sub-routers here
     private registerRoutes(): void {
         // /api/auth/*
-        // this.router.use("/auth", authRouter);
+        this.router.use("/auth", authRateLimiter, authRouter);
 
         // /api/merchants/*
         // this.router.use("/merchants", merchantRouter);

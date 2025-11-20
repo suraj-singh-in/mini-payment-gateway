@@ -12,16 +12,16 @@
     - [x] `/frontend`
     - [x] `/API_DOCS`
     - [x] `/docs` (for ARCHITECTURE.md, SECURITY.md)
-  - [ ] Initialize separate `package.json` in `/backend` and `/frontend`
-  - [ ] Add root `.editorconfig`, `.prettierrc`, `.eslintrc`, `.gitignore`
+  - [x] Initialize separate `package.json` in `/backend` and `/frontend`
+  - [x] Add root `.editorconfig`, `.prettierrc`, `.eslintrc`, `.gitignore`
 
 - [ ] Choose & configure core tooling
-  - [ ] TypeScript for backend & frontend
-  - [ ] ESLint + Prettier + TypeScript configs
-  - [ ] Install Husky + lint-staged (optional but recommended) for pre-commit checks
-  - [ ] Setup basic `README.md` skeleton with sections required by the assignment
+  - [x] TypeScript for backend & frontend
+  - [x] ESLint + Prettier + TypeScript configs
+  - [x] Install Husky + lint-staged (optional but recommended) for pre-commit checks
+  - [x] Setup basic `README.md` skeleton with sections required by the assignment
 
-- [ ] Environment & config
+- [x] Environment & config
   - [ ] Create `/backend/.env.example` with:
     - [ ] `NODE_ENV`, `PORT`
     - [ ] `MONGODB_URI`
@@ -37,7 +37,7 @@
 
 ## 1. Backend – Core Application Setup
 
-- [ ] Initialize backend project
+- [x] Initialize backend project
   - [ ] `npm init -y` in `/backend`
   - [ ] Install core deps:
     - [ ] `express`, `cors`, `helmet`, `cookie-parser`, `compression`
@@ -51,7 +51,7 @@
     - [ ] `@types/express`, `@types/jsonwebtoken`, `@types/node`, etc.
     - [ ] `jest`, `ts-jest`, `supertest` for tests
 
-- [ ] Express app bootstrap
+- [x] Express app bootstrap
   - [ ] `src/app.ts` – create express app with:
     - [ ] security middleware: `helmet`, `cors`, `compression`
     - [ ] JSON body parser with size limit

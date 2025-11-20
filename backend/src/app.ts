@@ -31,7 +31,7 @@ app.use(compression());
 app.use(requestLogger);
 
 // Routes
-app.use("/", masterRouter);
+app.use("/api", masterRouter);
 
 // Error handler (keep last)
 app.use(errorHandler);
