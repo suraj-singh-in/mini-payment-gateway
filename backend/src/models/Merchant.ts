@@ -5,7 +5,7 @@ export interface IMerchant extends Document {
     user_id: Types.ObjectId;
     business_name: string;
     api_key: string;
-    api_secret: string;
+    api_secret: string; // encrypted at rest
     status: "active" | "inactive" | "suspended";
     created_at: Date;
 }
@@ -31,7 +31,8 @@ const merchantSchema = new Schema<IMerchant>(
         },
         api_secret: {
             type: String,
-            required: true // ⚠ MUST BE ENCRYPTED AT REST
+            required: true,
+            select: false
         },
         status: {
             type: String,
@@ -43,7 +44,7 @@ const merchantSchema = new Schema<IMerchant>(
     {
         timestamps: {
             createdAt: "created_at",
-            updatedAt: false // merchants usually don’t change often
+            updatedAt: false
         }
     }
 );
