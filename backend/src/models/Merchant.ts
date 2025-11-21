@@ -7,6 +7,7 @@ export interface IMerchant extends Document {
     api_key: string;
     api_secret: string; // encrypted at rest
     status: "active" | "inactive" | "suspended";
+    webhook_url?: string;
     created_at: Date;
 }
 
@@ -32,13 +33,18 @@ const merchantSchema = new Schema<IMerchant>(
         api_secret: {
             type: String,
             required: true,
-            select: false
+            select: false // 🔐 never selected by default
         },
         status: {
             type: String,
             enum: ["active", "inactive", "suspended"],
             default: "active",
             index: true
+        },
+        webhook_url: {
+            type: String,
+            trim: true
+            // you can add a regex/url validator if you want
         }
     },
     {

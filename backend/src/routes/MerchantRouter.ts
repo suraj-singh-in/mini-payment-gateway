@@ -29,6 +29,10 @@ class MerchantRouter {
         this.router.get("/me", requireAuth, (req, res, next) =>
             merchantController.getMyMerchant(req, res, next)
         );
+
+        this.router.patch("/me", requireAuth, (req, res, next) =>
+            merchantController.updateMyMerchant(req, res, next)
+        );
     }
 }
 

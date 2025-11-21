@@ -3,9 +3,7 @@ import { healthRouter } from "./HealthRouter";
 import { authRouter } from "./AuthRouter";
 import { authRateLimiter } from "../middleware/rateLimit";
 import { merchantRouter } from "./MerchantRouter";
-// import { authRouter } from "./authRoutes";
-// import { merchantRouter } from "./merchantRoutes";
-// import { transactionRouter } from "./transactionRoutes";
+import { transactionRouter } from "./TransactionRouter";
 // import { webhookRouter } from "./webhookRoutes";
 
 class MasterRouter {
@@ -35,7 +33,7 @@ class MasterRouter {
         this.router.use("/merchants", merchantRouter);
 
         // /api/transactions/*
-        // this.router.use("/transactions", transactionRouter);
+        this.router.use("/transactions", transactionRouter);
 
         // /api/webhooks/*
         // this.router.use("/webhooks", webhookRouter);

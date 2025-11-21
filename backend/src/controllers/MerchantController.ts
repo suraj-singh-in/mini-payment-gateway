@@ -70,6 +70,54 @@ export class MerchantController {
             next(err);
         }
     }
+
+    @LogRequest({
+        label: "MerchantController.updateMyMerchant",
+        extraSensitiveFields: []
+    })
+    public async updateMyMerchant(req: AuthRequest, res: Response, next: NextFunction) {
+        try {
+            if (!req.user) {
+                return res.status(401).json({ error: "Unauthorized" });
+            }
+
+            const { business_name, webhook_url } = req.body;
+
+            if (
+                business_name === undefined &&
+                webhook_url === undefined
+            ) {
+                return res.status(400).json({
+                    error: "At least one field (business_name or webhook_url) must be provided"
+                });
+            }
+
+            // simple optional URL sanity check
+            if (webhook_url) {
+                try {
+                    // this throws if invalid URL
+                    new URL(webhook_url);
+                } catch {
+                    return res.status(400).json({ error: "Invalid webhook_url" });
+                }
+            }
+
+            const merchant = await merchantService.updateMerchantForUser(req.user.id, {
+                business_name,
+                webhook_url
+            });
+
+            return res.json({
+                id: merchant.id,
+                business_name: merchant.business_name,
+                api_key: merchant.api_key,
+                status: merchant.status,
+                webhook_url: merchant.webhook_url ?? null
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
 }
 
 export const merchantController = MerchantController.getInstance();

@@ -85,6 +85,43 @@ export class MerchantService {
 
         return { merchant, apiKey, apiSecretPlain };
     }
+
+
+    public async updateMerchantForUser(
+        userId: string,
+        updates: {
+            business_name?: string;
+            webhook_url?: string | null;
+        }
+    ) {
+        const $set: Record<string, unknown> = {};
+        if (updates.business_name !== undefined) {
+            $set.business_name = updates.business_name;
+        }
+        if (updates.webhook_url !== undefined) {
+            // allow user to clear webhook by sending null/empty string
+            if (updates.webhook_url === null || updates.webhook_url.trim() === "") {
+                $set.webhook_url = undefined;
+            } else {
+                $set.webhook_url = updates.webhook_url.trim();
+            }
+        }
+
+        const merchant = await MerchantModel.findOneAndUpdate(
+            { user_id: userId },
+            { $set },
+            { new: true }
+        ).exec();
+
+        if (!merchant) {
+            throw Object.assign(new Error("Merchant not found for this user"), {
+                statusCode: 404
+            });
+        }
+
+        return merchant;
+    }
+
 }
 
 export const merchantService = MerchantService.getInstance();

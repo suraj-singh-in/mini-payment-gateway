@@ -1,29 +1,30 @@
 import { Schema, model, Document, Types } from "mongoose";
 
-export interface ITransaction extends Document {
+export type CheckoutSessionStatus =
+    | "pending"
+    | "completed"
+    | "failed"
+    | "expired"
+    | "cancelled";
+
+export interface ICheckoutSession extends Document {
     merchant_id: Types.ObjectId;
-    checkout_session_id?: Types.ObjectId;
     amount: number;
     currency: string;
-    status: "pending" | "success" | "failed";
+    status: CheckoutSessionStatus;
     customer_email: string;
     metadata?: Record<string, unknown>;
-    signature: string;
-    payment_method?: string;
+    expires_at: Date;
     created_at: Date;
+    updated_at: Date;
 }
 
-const transactionSchema = new Schema<ITransaction>(
+const checkoutSessionSchema = new Schema<ICheckoutSession>(
     {
         merchant_id: {
             type: Schema.Types.ObjectId,
             ref: "Merchant",
             required: true,
-            index: true
-        },
-        checkout_session_id: {
-            type: Schema.Types.ObjectId,
-            ref: "CheckoutSession",
             index: true
         },
         amount: {
@@ -39,7 +40,7 @@ const transactionSchema = new Schema<ITransaction>(
         },
         status: {
             type: String,
-            enum: ["pending", "success", "failed"],
+            enum: ["pending", "completed", "failed", "expired", "cancelled"],
             default: "pending",
             index: true
         },
@@ -52,25 +53,23 @@ const transactionSchema = new Schema<ITransaction>(
         metadata: {
             type: Schema.Types.Mixed
         },
-        signature: {
-            type: String,
-            required: true
-        },
-        payment_method: {
-            type: String
+        expires_at: {
+            type: Date,
+            required: true,
+            index: true
         }
     },
     {
         timestamps: {
             createdAt: "created_at",
-            updatedAt: false
+            updatedAt: "updated_at"
         }
     }
 );
 
-transactionSchema.index({ merchant_id: 1, status: 1, created_at: -1 });
+checkoutSessionSchema.index({ merchant_id: 1, created_at: -1 });
 
-export const TransactionModel = model<ITransaction>(
-    "Transaction",
-    transactionSchema
+export const CheckoutSessionModel = model<ICheckoutSession>(
+    "CheckoutSession",
+    checkoutSessionSchema
 );
