@@ -7,6 +7,10 @@ import { decryptSecret } from "../security/encryption";
 import { webhookService } from "../services/WebhookService";
 import { MerchantModel } from "../models/Merchant";
 import { hashUserAgent } from "../security/userAgent";
+import {
+    ValidateCheckoutInitRequest,
+    ValidateProcessPaymentRequest
+} from "../guards/TransactionGuards";
 
 export class TransactionController {
     private static instance: TransactionController;
@@ -25,6 +29,7 @@ export class TransactionController {
      * Protected with merchantHmacAuth (middleware attaches req.merchant)
      */
     @LogRequest({ label: "TransactionController.createCheckoutSession" })
+    @ValidateCheckoutInitRequest()
     public async createCheckoutSession(req: AuthRequest, res: Response, next: NextFunction) {
         try {
             const merchant = (req as any).merchant;
@@ -78,6 +83,7 @@ export class TransactionController {
         label: "TransactionController.processPayment",
         extraSensitiveFields: []
     })
+    @ValidateProcessPaymentRequest()
     public async processPayment(req: AuthRequest, res: Response, next: NextFunction) {
         try {
             const { payment_method, amount } = req.body;

@@ -3,6 +3,15 @@ import { Request, Response, NextFunction } from "express";
 import { authService } from "../services/AuthService";
 import { LogRequest } from "../decorators/LogRequest";
 
+import {
+    ValidateRegisterRequest,
+    ValidateLoginRequest,
+    ValidateRefreshTokenRequest,
+    ValidateLogoutRequest,
+    ValidateVerifyEmailRequest
+} from "../guards/AuthGuards";
+
+
 export class AuthController {
     private static instance: AuthController;
 
@@ -16,6 +25,7 @@ export class AuthController {
     }
 
     @LogRequest({ label: "AuthController.register", extraSensitiveFields: ["password"] })
+    @ValidateRegisterRequest()
     public async register(req: Request, res: Response, next: NextFunction) {
         try {
             const { email, password } = req.body;
@@ -36,6 +46,7 @@ export class AuthController {
     }
 
     @LogRequest({ label: "AuthController.verifyEmail" })
+    @ValidateVerifyEmailRequest()
     public async verifyEmail(req: Request, res: Response, next: NextFunction) {
         try {
             const token = req.query.token as string;
@@ -62,6 +73,7 @@ export class AuthController {
         label: "AuthController.login",
         extraSensitiveFields: ["password", "email"]
     })
+    @ValidateLoginRequest()
     public async login(req: Request, res: Response, next: NextFunction) {
         try {
             const { email, password } = req.body;
@@ -85,6 +97,7 @@ export class AuthController {
     }
 
     @LogRequest({ label: "AuthController.refresh", extraSensitiveFields: ["refreshToken"] })
+    @ValidateRefreshTokenRequest()
     public async refresh(req: Request, res: Response, next: NextFunction) {
         try {
             const { refreshToken } = req.body;
@@ -110,6 +123,7 @@ export class AuthController {
     }
 
     @LogRequest({ label: "AuthController.logout", extraSensitiveFields: ["refreshToken"] })
+    @ValidateLogoutRequest()
     public async logout(req: Request, res: Response, next: NextFunction) {
         try {
             const { refreshToken } = req.body;

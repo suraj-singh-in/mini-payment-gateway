@@ -2,6 +2,10 @@ import { Response, NextFunction } from "express";
 import { merchantService } from "../services/MerchantService";
 import { LogRequest } from "../decorators/LogRequest";
 import { AuthRequest } from "../middleware/requireAuth";
+import {
+    ValidateCreateMerchantRequest,
+    ValidateUpdateMerchantRequest
+} from "../guards/MerchantGuards";
 
 export class MerchantController {
     private static instance: MerchantController;
@@ -16,6 +20,7 @@ export class MerchantController {
     }
 
     @LogRequest({ label: "MerchantController.createMerchant", extraSensitiveFields: [] })
+    @ValidateCreateMerchantRequest()
     public async createMerchant(req: AuthRequest, res: Response, next: NextFunction) {
         try {
             if (!req.user) {
@@ -49,6 +54,7 @@ export class MerchantController {
     }
 
     @LogRequest({ label: "MerchantController.getMyMerchant" })
+    @ValidateUpdateMerchantRequest()
     public async getMyMerchant(req: AuthRequest, res: Response, next: NextFunction) {
         try {
             if (!req.user) {
