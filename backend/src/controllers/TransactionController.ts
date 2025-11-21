@@ -5,8 +5,8 @@ import { transactionService } from "../services/TransactionService";
 import { merchantService } from "../services/MerchantService";
 import { decryptSecret } from "../security/encryption";
 import { webhookService } from "../services/WebhookService";
-import { CheckoutSessionModel } from "../models/CheckoutSession";
 import { MerchantModel } from "../models/Merchant";
+import { hashUserAgent } from "../security/userAgent";
 
 export class TransactionController {
     private static instance: TransactionController;
@@ -40,12 +40,23 @@ export class TransactionController {
                 });
             }
 
+            const userAgentHeader = req.headers["user-agent"] as string | undefined;
+            const userAgentHash = hashUserAgent(userAgentHeader);
+
             const session = await transactionService.createCheckoutSession({
                 merchantId: merchant.id,
                 amount,
                 currency,
                 customer_email,
-                metadata
+                metadata,
+                user_agent_hash: userAgentHash
+            });
+
+            res.cookie("pg_session", userAgentHash, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+                maxAge: 30 * 60 * 1000
             });
 
             return res.status(201).json({
@@ -69,7 +80,6 @@ export class TransactionController {
     })
     public async processPayment(req: AuthRequest, res: Response, next: NextFunction) {
         try {
-            const { sessionId } = req.params;
             const { payment_method, amount } = req.body;
 
             if (!payment_method || typeof amount !== "number") {
@@ -78,9 +88,9 @@ export class TransactionController {
                 });
             }
 
-            const session = await CheckoutSessionModel.findById(sessionId);
+            const session = (req as any).checkoutSession;
             if (!session) {
-                return res.status(404).json({ error: "Checkout session not found" });
+                return res.status(500).json({ error: "Checkout session context missing" });
             }
 
             const merchant = await MerchantModel.findById(session.merchant_id).select(
@@ -101,7 +111,6 @@ export class TransactionController {
                     merchantSecret: secretPlain
                 });
 
-            // 🔔 Fire webhook (non-blocking)
             void webhookService.sendTransactionStatusWebhook({
                 merchant,
                 merchantSecretPlain: secretPlain,

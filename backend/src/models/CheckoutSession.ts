@@ -15,6 +15,7 @@ export interface ICheckoutSession extends Document {
     customer_email: string;
     metadata?: Record<string, unknown>;
     expires_at: Date;
+    user_agent_hash?: string;
     created_at: Date;
     updated_at: Date;
 }
@@ -57,6 +58,10 @@ const checkoutSessionSchema = new Schema<ICheckoutSession>(
             type: Date,
             required: true,
             index: true
+        },
+        user_agent_hash: {
+            type: String,
+            required: true
         }
     },
     {

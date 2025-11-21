@@ -25,9 +25,17 @@ export class TransactionService {
         customer_email: string;
         metadata?: Record<string, unknown>;
         expiryMinutes?: number;
+        user_agent_hash: string;
     }): Promise<ICheckoutSession> {
-        const { merchantId, amount, currency, customer_email, metadata, expiryMinutes = 30 } =
-            params;
+        const {
+            merchantId,
+            amount,
+            currency,
+            customer_email,
+            metadata,
+            expiryMinutes = 30,
+            user_agent_hash
+        } = params;
 
         const expiresAt = new Date(Date.now() + expiryMinutes * 60 * 1000);
 
@@ -38,7 +46,8 @@ export class TransactionService {
             customer_email,
             metadata,
             status: "pending",
-            expires_at: expiresAt
+            expires_at: expiresAt,
+            user_agent_hash
         });
 
         return session;

@@ -2,6 +2,7 @@ import { Router } from "express";
 import { transactionController } from "../controllers/TransactionController";
 import { merchantHmacAuth } from "../middleware/merchantHmacAuth";
 import { requireAuth } from "../middleware/requireAuth";
+import { requireCheckoutCookie } from "../middleware/requireCheckoutCookie";
 
 class TransactionRouter {
     private static instance: TransactionRouter;
@@ -30,6 +31,7 @@ class TransactionRouter {
         // 2) Process payment for a checkout session (mock)
         this.router.post(
             "/checkout/:sessionId/pay",
+            requireCheckoutCookie,
             (req, res, next) => transactionController.processPayment(req, res, next)
         );
 
