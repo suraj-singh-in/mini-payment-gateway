@@ -1,5 +1,6 @@
 "use client";
 
+import BasicAnalytics from "@/components/analytics/BasicAnalytics";
 import { CreateMerchantForm } from "@/components/forms/create-merchant-form";
 import {
     Breadcrumb,
@@ -35,8 +36,7 @@ export default function Page() {
                 {loadingMerchant ? (
                     <p className="text-sm text-muted-foreground">Loading merchant...</p>
                 ) : merchant ? (
-                    // <BasicAnalytics merchant={merchant} />
-                    <div>BasicAnalytics</div>
+                    <BasicAnalytics merchant={merchant} />
                 ) : (
                     <CreateMerchantForm />
                 )}

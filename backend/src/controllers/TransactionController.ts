@@ -11,6 +11,7 @@ import {
     ValidateCheckoutInitRequest,
     ValidateProcessPaymentRequest
 } from "../guards/TransactionGuards";
+import { logger } from "../utils/logger";
 
 export class TransactionController {
     private static instance: TransactionController;
@@ -223,6 +224,43 @@ export class TransactionController {
             next(err);
         }
     }
+
+    @LogRequest({ label: "TransactionController.getTransactionDetails" })
+    public async getAnalytics(req: AuthRequest, res: Response, next: NextFunction) {
+        try {
+            const user = req.user;
+
+            if (!user) {
+                return res.status(401).json({ error: "Unauthorized" });
+            }
+
+            const merchant = await merchantService.getMerchantForUser(user.id);
+            logger.info("merchant", merchant)
+            if (!merchant) {
+                return res.status(404).json({ error: "Merchant not found for this user" });
+            }
+
+            const analytics = await transactionService.getMerchantAnalytics(merchant.id);
+
+            return res.json({
+                last24h: {
+                    totalVolume: analytics.last24h.totalVolume,
+                    successfulPayments: analytics.last24h.successfulPayments,
+                    failedPayments: analytics.last24h.failedPayments,
+                    conversionRate: analytics.last24h.conversionRate
+                },
+                last7d: {
+                    totalVolume: analytics.last7d.totalVolume,
+                    successfulPayments: analytics.last7d.successfulPayments,
+                    failedPayments: analytics.last7d.failedPayments,
+                    conversionRate: analytics.last7d.conversionRate
+                }
+            });
+        } catch (err) {
+            next(err);
+        }
+    }
+
 }
 
 export const transactionController = TransactionController.getInstance();

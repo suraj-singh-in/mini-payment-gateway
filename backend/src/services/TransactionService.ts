@@ -1,7 +1,19 @@
-import { Types } from "mongoose";
+import mongoose, { Types } from "mongoose";
 import { CheckoutSessionModel, ICheckoutSession } from "../models/CheckoutSession";
 import { ITransaction, TransactionModel } from "../models/Transaction";
 import { computeHmac } from "../security/hmac";
+
+export interface WindowAnalytics {
+    totalVolume: number;
+    successfulPayments: number;
+    failedPayments: number;
+    conversionRate: number; // percentage, e.g. 93.3
+}
+
+export interface MerchantAnalytics {
+    last24h: WindowAnalytics;
+    last7d: WindowAnalytics;
+}
 
 export class TransactionService {
     private static instance: TransactionService;
@@ -162,6 +174,111 @@ export class TransactionService {
             .sort({ created_at: -1 })
             .limit(limit)
             .exec();
+    }
+
+    public async getMerchantAnalytics(merchantId: string): Promise<MerchantAnalytics> {
+        const now = new Date();
+
+        const last24hDate = new Date(now.getTime() - 24 * 60 * 60 * 1000);    // 24 hours
+        const last7dDate = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000); // 7 days
+
+        const [result] = await TransactionModel.aggregate([
+            {
+                $match: {
+                    merchant_id: new mongoose.Types.ObjectId(merchantId)
+                }
+            },
+            {
+                $facet: {
+                    last24h: [
+                        {
+                            $match: {
+                                created_at: { $gte: last24hDate }
+                            }
+                        },
+                        {
+                            $group: {
+                                _id: null,
+                                totalVolume: { $sum: "$amount" },
+                                successfulPayments: {
+                                    $sum: {
+                                        $cond: [{ $eq: ["$status", "success"] }, 1, 0]
+                                    }
+                                },
+                                failedPayments: {
+                                    $sum: {
+                                        $cond: [{ $eq: ["$status", "failed"] }, 1, 0]
+                                    }
+                                }
+                            }
+                        }
+                    ],
+                    last7d: [
+                        {
+                            $match: {
+                                created_at: { $gte: last7dDate }
+                            }
+                        },
+                        {
+                            $group: {
+                                _id: null,
+                                totalVolume: { $sum: "$amount" },
+                                successfulPayments: {
+                                    $sum: {
+                                        $cond: [{ $eq: ["$status", "success"] }, 1, 0]
+                                    }
+                                },
+                                failedPayments: {
+                                    $sum: {
+                                        $cond: [{ $eq: ["$status", "failed"] }, 1, 0]
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+        ]);
+
+        const raw24 = result?.last24h?.[0] ?? {
+            totalVolume: 0,
+            successfulPayments: 0,
+            failedPayments: 0
+        };
+
+        const raw7 = result?.last7d?.[0] ?? {
+            totalVolume: 0,
+            successfulPayments: 0,
+            failedPayments: 0
+        };
+
+        const computeConversion = (success: number, failed: number): number => {
+            const total = success + failed;
+            if (total === 0) return 0;
+            return (success / total) * 100;
+        };
+
+        const last24h: WindowAnalytics = {
+            totalVolume: raw24.totalVolume ?? 0,
+            successfulPayments: raw24.successfulPayments ?? 0,
+            failedPayments: raw24.failedPayments ?? 0,
+            conversionRate: computeConversion(
+                raw24.successfulPayments ?? 0,
+                raw24.failedPayments ?? 0
+            )
+        };
+
+        const last7d: WindowAnalytics = {
+            totalVolume: raw7.totalVolume ?? 0,
+            successfulPayments: raw7.successfulPayments ?? 0,
+            failedPayments: raw7.failedPayments ?? 0,
+            conversionRate: computeConversion(
+                raw7.successfulPayments ?? 0,
+                raw7.failedPayments ?? 0
+            )
+        };
+
+        return { last24h, last7d };
     }
 }
 

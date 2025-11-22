@@ -54,7 +54,6 @@ export class MerchantController {
     }
 
     @LogRequest({ label: "MerchantController.getMyMerchant" })
-    @ValidateUpdateMerchantRequest()
     public async getMyMerchant(req: AuthRequest, res: Response, next: NextFunction) {
         try {
             if (!req.user) {

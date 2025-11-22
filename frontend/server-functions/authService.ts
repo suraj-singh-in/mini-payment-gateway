@@ -144,3 +144,34 @@ export async function logoutServerFunction() {
         return FailureResponse(error, message);
     }
 }
+
+export async function getCurrentUserServerFunction() {
+    try {
+        const cookieStore = await cookies();
+        const accessToken = cookieStore.get("accessToken")?.value;
+        console.log("accessToken", accessToken);
+
+        if (!accessToken) {
+            return FailureResponse(null, "Not authenticated");
+        }
+
+        const response = await axios.get(
+            apiUrl(AUTH_API_END_POINTS.GET_USER),
+            {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }
+        );
+
+        // assuming backend returns { user: { id, email, role } }
+        return SuccessResponse(response.data);
+    } catch (error: any) {
+        console.log("getCurrentUser error", error?.response?.data || error);
+        const message =
+            error?.response?.data?.message ||
+            error?.message ||
+            "Failed to fetch user";
+        return FailureResponse(JSON.stringify(error), message);
+    }
+}

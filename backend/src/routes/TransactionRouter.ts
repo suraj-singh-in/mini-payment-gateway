@@ -21,6 +21,12 @@ class TransactionRouter {
     }
 
     private registerRoutes(): void {
+        this.router.get(
+            "/analytics",
+            requireAuth,
+            (req, res, next) => transactionController.getAnalytics(req, res, next)
+        );
+
         // 1) Create checkout session (merchant-signed)
         this.router.post(
             "/checkout/init",
@@ -48,6 +54,7 @@ class TransactionRouter {
             requireAuth,
             (req, res, next) => transactionController.getTransactionDetails(req, res, next)
         );
+
     }
 }
 

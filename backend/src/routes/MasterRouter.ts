@@ -30,7 +30,7 @@ class MasterRouter {
         this.router.use("/auth", authRouter);
 
         // /api/merchants/*
-        this.router.use("/merchants", merchantRouter);
+        this.router.use("/merchant", merchantRouter);
 
         // /api/transactions/*
         this.router.use("/transactions", transactionRouter);

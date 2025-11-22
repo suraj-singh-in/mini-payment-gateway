@@ -10,10 +10,9 @@ import {
 import { useRouter } from "next/navigation";
 
 import {
-    refreshTokenServerFunction,
+    getCurrentUserServerFunction,
     logoutServerFunction,
 } from "@/server-functions/authService";
-
 import { getMyMerchant } from "@/server-functions/merchantService";
 import { Merchant } from "@/types";
 
@@ -56,15 +55,16 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         setLoadingUser(true);
         setUserError(null);
         try {
-            const res = await refreshTokenServerFunction();
-            console.log("refreshUser res", res)
+            const res = await getCurrentUserServerFunction();
+            console.log("refreshUser (getCurrentUser) res", res);
+
             if (res?.success && res.data?.user) {
                 setUser(res.data.user);
             } else {
                 setUser(null);
                 setUserError(res?.message || "Not authenticated");
+                // Optional: redirect if you are in a protected area
                 router.push("/auth?type=login");
-
             }
         } catch (err) {
             console.error("Failed to load current user:", err);
@@ -81,12 +81,10 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         setMerchantError(null);
         try {
             const res = await getMyMerchant();
-            console.log("res", res)
+            console.log("getMyMerchant res", res);
             if (res.success) {
                 setMerchant(res.data);
             } else {
-                // If backend sends 404 "Merchant not found", your server function
-                // should still return success=false; we treat this as "no merchant yet".
                 console.warn("getMyMerchant failed:", res.message);
                 setMerchant(null);
                 setMerchantError(res.message || null);
@@ -108,17 +106,20 @@ export function DashboardProvider({ children }: { children: ReactNode }) {
         } finally {
             setUser(null);
             setMerchant(null);
+            router.push("/auth?type=login");
         }
     };
 
     useEffect(() => {
+        // On initial mount, just try to get current user
+        // (do NOT refresh tokens from here)
         refreshUser();
     }, []);
 
     useEffect(() => {
-        console.log("user", user)
-        // Once we know user, try loading merchant
+        console.log("user changed", user);
         if (user) {
+            // Once we know user exists, load merchant
             refreshMerchant();
         } else {
             setMerchant(null);

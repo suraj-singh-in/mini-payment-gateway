@@ -10,6 +10,7 @@ import {
     ValidateLogoutRequest,
     ValidateVerifyEmailRequest
 } from "../guards/AuthGuards";
+import { AuthRequest } from "../middleware/requireAuth";
 
 
 export class AuthController {
@@ -132,6 +133,19 @@ export class AuthController {
             }
 
             return res.json({ message: "Logged out" });
+        } catch (err) {
+            next(err);
+        }
+    }
+
+
+    @LogRequest({ label: "AuthController.me", extraSensitiveFields: ["refreshToken"] })
+    public async me(req: AuthRequest, res: Response, next: NextFunction) {
+        try {
+            if (!req.user) {
+                return res.status(401).json({ error: "Unauthorized" });
+            }
+            return res.json({ user: req.user });
         } catch (err) {
             next(err);
         }

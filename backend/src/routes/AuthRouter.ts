@@ -1,6 +1,7 @@
 // src/routes/AuthRouter.ts
 import { Router } from "express";
 import { authController } from "../controllers/AuthController";
+import { requireAuth } from "../middleware/requireAuth";
 
 class AuthRouter {
     private static instance: AuthRouter;
@@ -27,6 +28,10 @@ class AuthRouter {
         // GET /api/auth/verify-email?token=...
         this.router.get("/verify-email", (req, res, next) =>
             authController.verifyEmail(req, res, next)
+        );
+
+        this.router.get("/me", requireAuth, (req, res, next) =>
+            authController.me(req, res, next)
         );
 
         // POST /api/auth/login

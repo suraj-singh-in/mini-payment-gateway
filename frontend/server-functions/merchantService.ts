@@ -1,23 +1,11 @@
 "use server";
 
 import axios from "axios";
-import { cookies } from "next/headers";
 import { apiUrl, MERCHANT_API_END_POINTS } from "@/lib/url-utils";
 import { FailureResponse, SuccessResponse } from "@/lib/utils";
 import { Merchant, MerchantCredentials } from "@/types";
+import { getAuthHeaderFromCookies } from "./utils";
 
-
-
-async function getAuthHeaderFromCookies() {
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get("accessToken")?.value;
-
-    if (!accessToken) return null;
-
-    return {
-        Authorization: `Bearer ${accessToken}`,
-    };
-}
 
 
 async function createMerchant(businessName: string) {
@@ -60,7 +48,6 @@ async function getMyMerchant() {
             { headers }
         );
 
-        console.log("getMyMerchant res, ", res)
 
         return SuccessResponse(res.data);
     } catch (error: any) {
