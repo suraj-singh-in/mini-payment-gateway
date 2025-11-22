@@ -27,7 +27,7 @@ class MasterRouter {
     // Attach all sub-routers here
     private registerRoutes(): void {
         // /api/auth/*
-        this.router.use("/auth", authRateLimiter, authRouter);
+        this.router.use("/auth", authRouter);
 
         // /api/merchants/*
         this.router.use("/merchants", merchantRouter);
