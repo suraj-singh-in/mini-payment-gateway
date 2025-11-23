@@ -1,4 +1,5 @@
 import * as React from "react"
+import { LogOut } from "lucide-react"
 import { ChevronRight } from "lucide-react"
 
 import {
@@ -9,6 +10,7 @@ import {
 import {
     Sidebar,
     SidebarContent,
+    SidebarFooter,
     SidebarGroup,
     SidebarGroupContent,
     SidebarGroupLabel,
@@ -18,6 +20,8 @@ import {
     SidebarMenuItem,
     SidebarRail,
 } from "@/components/ui/sidebar"
+import { logoutServerFunction } from "@/server-functions/authService"
+import { useRouter } from "next/navigation"
 
 // This is sample data.
 const data = {
@@ -84,6 +88,8 @@ const data = {
 }
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const router = useRouter();
+
     return (
         <Sidebar {...props} >
             <SidebarHeader>
@@ -123,8 +129,29 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                         </SidebarGroup>
                     </Collapsible>
                 ))}
+
             </SidebarContent>
             <SidebarRail />
+
+            {/* 🚀 LOGOUT — Permanently at bottom */}
+            <div className="p-4 border-t">
+                <SidebarMenu>
+                    <SidebarMenuItem>
+                        <SidebarMenuButton
+                            className="text-red-600 hover:bg-red-600 hover:text-white"
+                            onClick={async () => {
+                                await logoutServerFunction();
+                                router.push("/auth?type=login");
+                            }}
+                        >
+                            <LogOut className="mr-2 h-4 w-4" /> Logout
+                        </SidebarMenuButton>
+                    </SidebarMenuItem>
+                </SidebarMenu>
+            </div>
+
+            <SidebarRail />
+
         </Sidebar>
     )
 }

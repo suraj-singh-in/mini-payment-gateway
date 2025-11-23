@@ -53,7 +53,7 @@ export async function loginServerFunction(email: string, password: string) {
             error?.response?.data?.message ||
             error?.message ||
             "Something went wrong";
-        return FailureResponse(error, message);
+        return FailureResponse(null, message);
     }
 }
 
@@ -75,7 +75,7 @@ export async function registerServerFunction(email: string, password: string) {
             error?.response?.data?.message ||
             error?.message ||
             "Something went wrong";
-        return FailureResponse(error, message);
+        return FailureResponse(null, message);
     }
 }
 
@@ -110,7 +110,7 @@ export async function refreshTokenServerFunction() {
             error?.message ||
             "Unable to refresh session";
 
-        return FailureResponse(error, message);
+        return FailureResponse(null, message);
     }
 }
 
@@ -121,7 +121,7 @@ export async function logoutServerFunction() {
 
         if (currentRefreshToken) {
             await axios.post(apiUrl(AUTH_API_END_POINTS.LOGOUT), {
-                refreshToken: currentRefreshToken,
+                refresh_token: currentRefreshToken,
             });
         }
 
@@ -141,7 +141,7 @@ export async function logoutServerFunction() {
             error?.message ||
             "Logout failed (local session cleared)";
 
-        return FailureResponse(error, message);
+        return FailureResponse(null, message);
     }
 }
 
@@ -172,6 +172,6 @@ export async function getCurrentUserServerFunction() {
             error?.response?.data?.message ||
             error?.message ||
             "Failed to fetch user";
-        return FailureResponse(JSON.stringify(error), message);
+        return FailureResponse(null, message);
     }
 }
