@@ -28,12 +28,12 @@ const data = {
             items: [
                 {
                     title: "Analytics",
-                    url: "/dashboard/merchant/analytics",
+                    url: "/dashboard",
                 },
-                {
-                    title: "Update Details",
-                    url: "/dashboard/merchant/update",
-                },
+                // {
+                //     title: "Update Details",
+                //     url: "/dashboard/merchant/update",
+                // },
             ],
         },
         {
@@ -66,21 +66,20 @@ const data = {
             items: [
                 {
                     title: "Demo Checkout",
-                    url: "/dashboard/checkout/demo",
+                    url: "/checkout",
                 },
             ],
         },
-        {
-            title: "Architecture",
-            url: "#",
-            items: [
-                {
-                    title: "Accessibility",
-                    url: "#",
-                },
-            ],
-        },
-
+        // {
+        //     title: "Architecture",
+        //     url: "#",
+        //     items: [
+        //         {
+        //             title: "Accessibility",
+        //             url: "#",
+        //         },
+        //     ],
+        // },
     ],
 }
 
