@@ -42,7 +42,7 @@ const data = {
             items: [
                 {
                     title: "Transactions View",
-                    url: "dashboard/transactions/view",
+                    url: "/dashboard/transactions/view",
                 },
             ],
         },

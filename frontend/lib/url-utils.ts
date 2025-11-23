@@ -20,6 +20,9 @@ export const MERCHANT_API_END_POINTS = {
 
 export const TRANSACTION_API_END_POINTS = {
     ANALYTICS: "/api/transactions/analytics",
+    LIST: "/api/transactions",
+    DETAILS: (id: string) => `/api/transactions/${id}`,
+
 }
 
 export function apiUrl(path: string) {
