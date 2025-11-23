@@ -110,11 +110,16 @@ export class TransactionController {
             const encryptedSecret: string = merchant.api_secret;
             const secretPlain = decryptSecret(encryptedSecret);
 
+            const demoStatusHeader = req.header("x-demo-status");
+            const successFlag = demoStatusHeader?.toLowerCase() === "success";
+
+
             const { session: updatedSession, transaction } =
                 await transactionService.processPayment({
                     checkoutSessionId: session.id,
                     payment_method,
                     amount,
+                    success: successFlag,
                     merchantSecret: secretPlain
                 });
 
@@ -137,6 +142,29 @@ export class TransactionController {
             next(err);
         }
     }
+
+    @LogRequest({ label: "TransactionController.getCheckoutSession" })
+    public async getCheckoutSession(req: AuthRequest, res: Response, next: NextFunction) {
+        try {
+            const session = (req as any).checkoutSession;
+            if (!session) {
+                return res.status(500).json({ error: "Checkout session context missing" });
+            }
+
+
+            const checkoutSession = await transactionService.getCheckoutSession(session.id);
+            if (!checkoutSession) {
+                return res.status(404).json({ error: "Checkout session not found" });
+            }
+
+            return res.status(200).json(checkoutSession);
+
+
+        } catch (err) {
+            next(err);
+        }
+    }
+
 
     /**
      * Merchant dashboard: list transactions

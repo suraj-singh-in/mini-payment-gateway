@@ -277,10 +277,10 @@
   - [x] Responsive layout (sidebar + content on desktop, stacked on mobile)
   - [x] Common components: Navbar, Sidebar, Card, Table, Spinner, Toasts
 
-- [ ] API credentials page
-  - [ ] View merchant `api_key` (masked by default)
+- [x] API credentials page
+  - [x] View merchant `api_key` (masked by default)
   - [ ] One-time `api_secret` display after creation/rotation if API supports it
-  - [ ] Copy-to-clipboard buttons
+  - [x] Copy-to-clipboard buttons
   - [ ] Clear disclaimer about not exposing secrets
 
 - [ ] Transactions list

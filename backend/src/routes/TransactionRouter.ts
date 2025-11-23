@@ -41,6 +41,12 @@ class TransactionRouter {
             (req, res, next) => transactionController.processPayment(req, res, next)
         );
 
+        this.router.get(
+            "/checkout/:sessionId/pay",
+            requireCheckoutCookie,
+            (req, res, next) => transactionController.getCheckoutSession(req, res, next)
+        );
+
         // 3) Merchant dashboard – history
         this.router.get(
             "/",

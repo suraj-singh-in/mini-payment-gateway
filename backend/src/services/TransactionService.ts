@@ -65,6 +65,10 @@ export class TransactionService {
         return session;
     }
 
+    public async getCheckoutSession(sessionId: string): Promise<ICheckoutSession | null> {
+        return CheckoutSessionModel.findById(sessionId).exec();
+    }
+
     /**
      * Process payment for a checkout session (mock)
      */
@@ -72,7 +76,7 @@ export class TransactionService {
         checkoutSessionId: string;
         payment_method: string;
         amount: number;
-        // merchant's api_secret (plain) used to sign transaction record
+        success: boolean;
         merchantSecret: string;
     }): Promise<{ session: ICheckoutSession; transaction: ITransaction }> {
         const { checkoutSessionId, payment_method, amount, merchantSecret } = params;
@@ -105,7 +109,7 @@ export class TransactionService {
         }
 
         // Mock processing: here we just mark everything as success for now.
-        const success = true; // later, you can randomize or simulate failures
+        const success = params.success; // later, you can randomize or simulate failures
 
         // Signature – for auditing/verification
         const signingPayload = {
