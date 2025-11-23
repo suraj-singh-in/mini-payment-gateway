@@ -22,184 +22,184 @@
   - [x] Setup basic `README.md` skeleton with sections required by the assignment
 
 - [x] Environment & config
-  - [ ] Create `/backend/.env.example` with:
-    - [ ] `NODE_ENV`, `PORT`
-    - [ ] `MONGODB_URI`
-    - [ ] `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`
-    - [ ] `JWT_ACCESS_EXPIRY`, `JWT_REFRESH_EXPIRY`
-    - [ ] `ENCRYPTION_KEY` (for AES-GCM)
-    - [ ] `HMAC_DEFAULT_ALGO=sha256`
-    - [ ] `CORS_ALLOWED_ORIGINS`
-    - [ ] `RATE_LIMIT_AUTH_WINDOW`, `RATE_LIMIT_AUTH_MAX`
-  - [ ] Implement centralized config loader (no direct `process.env` usage)
+  - [x] Create `/backend/.env.example` with:
+    - [x] `NODE_ENV`, `PORT`
+    - [x] `MONGODB_URI`
+    - [x] `JWT_ACCESS_SECRET`, `JWT_REFRESH_SECRET`
+    - [x] `JWT_ACCESS_EXPIRY`, `JWT_REFRESH_EXPIRY`
+    - [x] `ENCRYPTION_KEY` (for AES-GCM)
+    - [x] `HMAC_DEFAULT_ALGO=sha256`
+    - [x] `CORS_ALLOWED_ORIGINS`
+    - [x] `RATE_LIMIT_AUTH_WINDOW`, `RATE_LIMIT_AUTH_MAX`
+  - [x] Implement centralized config loader (no direct `process.env` usage)
 
 ---
 
 ## 1. Backend – Core Application Setup
 
 - [x] Initialize backend project
-  - [ ] `npm init -y` in `/backend`
-  - [ ] Install core deps:
-    - [ ] `express`, `cors`, `helmet`, `cookie-parser`, `compression`
-    - [ ] `jsonwebtoken`, `bcryptjs` or `argon2`
-    - [ ] `mongoose`
-    - [ ] `express-rate-limit`
-    - [ ] `express-validator` or `zod` + custom middleware
-    - [ ] `crypto` (built-in) wrapper utilities
-  - [ ] Install dev deps:
-    - [ ] `typescript`, `ts-node-dev`
-    - [ ] `@types/express`, `@types/jsonwebtoken`, `@types/node`, etc.
-    - [ ] `jest`, `ts-jest`, `supertest` for tests
+  - [x] `npm init -y` in `/backend`
+  - [x] Install core deps:
+    - [x] `express`, `cors`, `helmet`, `cookie-parser`, `compression`
+    - [x] `jsonwebtoken`, `bcryptjs` or `argon2`
+    - [x] `mongoose`
+    - [x] `express-rate-limit`
+    - [x] `express-validator` or `zod` + custom middleware
+    - [x] `crypto` (built-in) wrapper utilities
+  - [x] Install dev deps:
+    - [x] `typescript`, `ts-node-dev`
+    - [x] `@types/express`, `@types/jsonwebtoken`, `@types/node`, etc.
+    - [x] `jest`, `ts-jest`, `supertest` for tests
 
 - [x] Express app bootstrap
-  - [ ] `src/app.ts` – create express app with:
-    - [ ] security middleware: `helmet`, `cors`, `compression`
-    - [ ] JSON body parser with size limit
-    - [ ] `cookie-parser`
-    - [ ] Centralized error handler
-  - [ ] `src/server.ts` – http server + MongoDB connection
+  - [x] `src/app.ts` – create express app with:
+    - [x] security middleware: `helmet`, `cors`, `compression`
+    - [x] JSON body parser with size limit
+    - [x] `cookie-parser`
+    - [x] Centralized error handler
+  - [x] `src/server.ts` – http server + MongoDB connection
 
-- [ ] MongoDB connection & models
-  - [ ] Setup Mongoose connection helper
-  - [ ] Define **User** model
-  - [ ] Define **Merchant** model
-  - [ ] Define **Transaction** model
-  - [ ] Add required indexes
+- [x] MongoDB connection & models
+  - [x] Setup Mongoose connection helper
+  - [x] Define **User** model
+  - [x] Define **Merchant** model
+  - [x] Define **Transaction** model
+  - [x] Add required indexes
 
 ---
 
 ## 2. Backend – Security Utilities & Middleware
 
-- [ ] Crypto & password utils
-  - [ ] Password hashing & verification
-  - [ ] HMAC signature generation & verification helpers
-  - [ ] Field encryption helper (AES-GCM) for `api_secret`
-  - [ ] Safe random ID / key generator for `api_key` & `api_secret`
+- [x] Crypto & password utils
+  - [x] Password hashing & verification
+  - [x] HMAC signature generation & verification helpers
+  - [x] Field encryption helper (AES-GCM) for `api_secret`
+  - [x] Safe random ID / key generator for `api_key` & `api_secret`
 
-- [ ] JWT handling
-  - [ ] Utility functions:
-    - [ ] `generateAccessToken(user)`
-    - [ ] `generateRefreshToken(user, jti)`
-    - [ ] `verifyAccessToken(token)`
-    - [ ] `verifyRefreshToken(token)`
-  - [ ] Refresh token persistence:
-    - [ ] Create `RefreshToken` model (or embed in User)
-    - [ ] Store **hashed** refresh token with `jti`, `userId`, `expiresAt`, `revoked`
-    - [ ] Implement reuse detection & invalidation
+- [x] JWT handling
+  - [x] Utility functions:
+    - [x] `generateAccessToken(user)`
+    - [x] `generateRefreshToken(user, jti)`
+    - [x] `verifyAccessToken(token)`
+    - [x] `verifyRefreshToken(token)`
+  - [x] Refresh token persistence:
+    - [x] Create `RefreshToken` model (or embed in User)
+    - [x] Store **hashed** refresh token with `jti`, `userId`, `expiresAt`, `revoked`
+    - [x] Implement reuse detection & invalidation
 
-- [ ] Validation & sanitization middleware
-  - [ ] Request validation using `zod` or `express-validator`
-  - [ ] Central `validateRequest` middleware
-  - [ ] Central sanitization for strings (trim, escape where needed)
+- [x] Validation & sanitization middleware
+  - [x] Request validation using `zod` or `express-validator`
+  - [x] Central `validateRequest` middleware
+  - [x] Central sanitization for strings (trim, escape where needed)
 
-- [ ] Rate limiting & abuse prevention
-  - [ ] Apply strict rate limit on auth endpoints (IP-based)
-  - [ ] General rate limit on merchant APIs
-  - [ ] Optional: add `slow-down` on repeated failures
+- [x] Rate limiting & abuse prevention
+  - [x] Apply strict rate limit on auth endpoints (IP-based)
+  - [x] General rate limit on merchant APIs
+  - [x] Optional: add `slow-down` on repeated failures
 
-- [ ] Auth middlewares
-  - [ ] `requireAuth` (access token)
-  - [ ] `requireMerchant` (user with merchant role)
-  - [ ] `requireApiKey` (for merchant APIs)
-  - [ ] HMAC verification middleware for signed requests
+- [x] Auth middlewares
+  - [x] `requireAuth` (access token)
+  - [x] `requireMerchant` (user with merchant role)
+  - [x] `requireApiKey` (for merchant APIs)
+  - [x] HMAC verification middleware for signed requests
 
-- [ ] CORS & HTTPS readiness
-  - [ ] Configurable CORS (allow specific frontend origin only)
-  - [ ] `app.set('trust proxy', 1)` for proxy scenarios
-  - [ ] Document HTTPS expectations (reverse proxy / TLS termination)
+- [x] CORS & HTTPS readiness
+  - [x] Configurable CORS (allow specific frontend origin only)
+  - [x] `app.set('trust proxy', 1)` for proxy scenarios
+  - [x] Document HTTPS expectations (reverse proxy / TLS termination)
 
 ---
 
 ## 3. Backend – User Authentication Flows
 
-- [ ] Auth routes: `POST /auth/register`
-  - [ ] Validate payload (email, password)
-  - [ ] Hash password
-  - [ ] Create user with `role=user`
-  - [ ] Generate email verification token (simple or signed)
-  - [ ] Mock email send (log to console or store in DB)
-  - [ ] Return safe success response
+- [x] Auth routes: `POST /auth/register`
+  - [x] Validate payload (email, password)
+  - [x] Hash password
+  - [x] Create user with `role=user`
+  - [x] Generate email verification token (simple or signed)
+  - [x] Mock email send (log to console or store in DB)
+  - [x] Return safe success response
 
-- [ ] Email verification: `GET /auth/verify-email?token=...`
-  - [ ] Verify token
-  - [ ] Mark user as verified
-  - [ ] Handle expired/invalid token gracefully
+- [x] Email verification: `GET /auth/verify-email?token=...`
+  - [x] Verify token
+  - [x] Mark user as verified
+  - [x] Handle expired/invalid token gracefully
 
-- [ ] Login: `POST /auth/login`
-  - [ ] Validate input
-  - [ ] Verify email & password
-  - [ ] Check `emailVerified` & user status
-  - [ ] Generate access + refresh tokens
-  - [ ] Store hashed refresh token
-  - [ ] Return tokens (access in body, refresh via httpOnly cookie or body based on design)
+- [x] Login: `POST /auth/login`
+  - [x] Validate input
+  - [x] Verify email & password
+  - [x] Check `emailVerified` & user status
+  - [x] Generate access + refresh tokens
+  - [x] Store hashed refresh token
+  - [x] Return tokens (access in body, refresh via httpOnly cookie or body based on design)
 
-- [ ] Refresh token: `POST /auth/refresh`
-  - [ ] Verify refresh token (cookie/header)
-  - [ ] Check DB for token, `revoked` flag and `expiresAt`
-  - [ ] Issue new access token (and optionally new refresh token + token rotation)
+- [x] Refresh token: `POST /auth/refresh`
+  - [x] Verify refresh token (cookie/header)
+  - [x] Check DB for token, `revoked` flag and `expiresAt`
+  - [x] Issue new access token (and optionally new refresh token + token rotation)
 
-- [ ] Logout: `POST /auth/logout`
-  - [ ] Revoke refresh token in DB
-  - [ ] Clear refresh token cookie (if cookie based)
-  - [ ] Return success
+- [x] Logout: `POST /auth/logout`
+  - [x] Revoke refresh token in DB
+  - [x] Clear refresh token cookie (if cookie based)
+  - [x] Return success
 
 ---
 
 ## 4. Backend – Merchant Management
 
-- [ ] Merchant creation: `POST /merchants`
-  - [ ] Protected by `requireAuth`
-  - [ ] Validate merchant data (`business_name`, etc.)
-  - [ ] Generate `api_key` + `api_secret`
-    - [ ] Encrypt `api_secret` at rest before saving
-  - [ ] Store merchant mapping to `user_id`
-  - [ ] Return **only** `api_key` and `api_secret` once (masked later)
+- [x] Merchant creation: `POST /merchants`
+  - [x] Protected by `requireAuth`
+  - [x] Validate merchant data (`business_name`, etc.)
+  - [x] Generate `api_key` + `api_secret`
+    - [x] Encrypt `api_secret` at rest before saving
+  - [x] Store merchant mapping to `user_id`
+  - [x] Return **only** `api_key` and `api_secret` once (masked later)
 
-- [ ] Merchant list & details
-  - [ ] `GET /merchants/me` – get merchant info for logged-in user
-  - [ ] Return masked `api_key`, never return raw `api_secret`
+- [x] Merchant list & details
+  - [x] `GET /merchants/me` – get merchant info for logged-in user
+  - [x] Return masked `api_key`, never return raw `api_secret`
 
-- [ ] API key rotation: `POST /merchants/:id/rotate-key`
-  - [ ] Generate new `api_key` + `api_secret`
-  - [ ] Mark previous key as `deprecated` with grace period OR immediate revocation
-  - [ ] Store previous keys if needed, or just overwrite & invalidate all previous
-  - [ ] Return new credentials safely once
+- [x] API key rotation: `POST /merchants/:id/rotate-key`
+  - [x] Generate new `api_key` + `api_secret`
+  - [x] Mark previous key as `deprecated` with grace period OR immediate revocation
+  - [x] Store previous keys if needed, or just overwrite & invalidate all previous
+  - [x] Return new credentials safely once
 
-- [ ] HMAC signing standardization
-  - [ ] Define canonical string format for signature
-  - [ ] Implement helper on backend & document in API_DOCS
-  - [ ] Enforce signature validation on transaction endpoints used by merchants
+- [x] HMAC signing standardization
+  - [x] Define canonical string format for signature
+  - [x] Implement helper on backend & document in API_DOCS
+  - [x] Enforce signature validation on transaction endpoints used by merchants
 
 ---
 
 ## 5. Backend – Transactions & Webhooks
 
-- [ ] Checkout session creation: `POST /transactions/checkout`
-  - [ ] Auth via API key + HMAC
-  - [ ] Validate amount, currency, customer_email, metadata
-  - [ ] Create transaction with `status="PENDING"`
-  - [ ] Store incoming request signature
-  - [ ] Return checkout session data (id, amount, status)
+- [x] Checkout session creation: `POST /transactions/checkout`
+  - [x] Auth via API key + HMAC
+  - [x] Validate amount, currency, customer_email, metadata
+  - [x] Create transaction with `status="PENDING"`
+  - [x] Store incoming request signature
+  - [x] Return checkout session data (id, amount, status)
 
-- [ ] Process payment (mock): `POST /transactions/:id/process`
-  - [ ] Auth via API key + HMAC
-  - [ ] Validate transaction ownership by merchant
-  - [ ] Mock payment result (success/failure)
-  - [ ] Update transaction status + timestamp(s)
-  - [ ] Trigger webhook notification (if webhook URL configured for merchant)
+- [x] Process payment (mock): `POST /transactions/:id/process`
+  - [x] Auth via API key + HMAC
+  - [x] Validate transaction ownership by merchant
+  - [x] Mock payment result (success/failure)
+  - [x] Update transaction status + timestamp(s)
+  - [x] Trigger webhook notification (if webhook URL configured for merchant)
 
-- [ ] Fetch transaction history:
-  - [ ] `GET /transactions` – merchant scoped
-    - [ ] Filters: date range, status, amount range
-  - [ ] `GET /transactions/:id` – transaction details
+- [x] Fetch transaction history:
+  - [x] `GET /transactions` – merchant scoped
+    - [x] Filters: date range, status, amount range
+  - [x] `GET /transactions/:id` – transaction details
 
-- [ ] Webhook endpoint: `POST /webhooks/transaction-status`
-  - [ ] For this project, create endpoint **for consumers** or simulated external service
-  - [ ] Validate body and optional signature
-  - [ ] Document expected payload
+- [x] Webhook endpoint: `POST /webhooks/transaction-status`
+  - [x] For this project, create endpoint **for consumers** or simulated external service
+  - [x] Validate body and optional signature
+  - [x] Document expected payload
 
-- [ ] Aggregation queries (Mongo)
-  - [ ] Aggregation 1: Merchant analytics
+- [x] Aggregation queries (Mongo)
+  - [x] Aggregation 1: Merchant analytics
     - [ ] total transactions, total amount, success rate
   - [ ] Aggregation 2: Daily / monthly transaction stats (for charting on dashboard)
 
@@ -212,9 +212,9 @@
   - [ ] Hide stack traces & internal messages in production
   - [ ] Map errors to specific HTTP codes (401, 403, 422, 429, 500)
 
-- [ ] Logging
-  - [ ] Implement structured logging (minimal, using `console` or a logger)
-  - [ ] Ensure no secrets (passwords, tokens, api_secret, HMAC signatures) are logged
+- [x] Logging
+  - [x] Implement structured logging (minimal, using `console` or a logger)
+  - [x] Ensure no secrets (passwords, tokens, api_secret, HMAC signatures) are logged
 
 - [ ] XSS & injection prevention
   - [ ] Use parameterized queries (via Mongoose – default)
@@ -253,29 +253,29 @@
 
 ## 8. Frontend – Setup & Auth Flows
 
-- [ ] Initialize Next.js app (TS)
-  - [ ] Install deps: `next`, `react`, `react-dom`, `axios` (or fetch wrapper), `zod`, `react-hook-form`/`formik`
-  - [ ] Configure basic layout, `_app.tsx` or App Router structure
+- [x] Initialize Next.js app (TS)
+  - [x] Install deps: `next`, `react`, `react-dom`, `axios` (or fetch wrapper), `zod`, `react-hook-form`/`formik`
+  - [x] Configure basic layout, `_app.tsx` or App Router structure
 
-- [ ] Authentication UI
-  - [ ] Register page `/auth/register`
-  - [ ] Login page `/auth/login`
-  - [ ] Handle email verification feedback page
-  - [ ] Implement auth context / store
-  - [ ] Store access token (in memory or secure storage)
-  - [ ] Use refresh token via httpOnly cookie (handled by backend) – call `/auth/refresh` on app load
+- [x] Authentication UI
+  - [x] Register page `/auth/register`
+  - [x] Login page `/auth/login`
+  - [x] Handle email verification feedback page
+  - [x] Implement auth context / store
+  - [x] Store access token (in memory or secure storage)
+  - [x] Use refresh token via httpOnly cookie (handled by backend) – call `/auth/refresh` on app load
 
-- [ ] Protected routes
-  - [ ] Implement HOC or middleware pattern to protect dashboard routes
-  - [ ] Redirect unauthenticated users to login
+- [x] Protected routes
+  - [x] Implement HOC or middleware pattern to protect dashboard routes
+  - [x] Redirect unauthenticated users to login
 
 ---
 
 ## 9. Frontend – Merchant Dashboard
 
-- [ ] Dashboard layout
-  - [ ] Responsive layout (sidebar + content on desktop, stacked on mobile)
-  - [ ] Common components: Navbar, Sidebar, Card, Table, Spinner, Toasts
+- [x] Dashboard layout
+  - [x] Responsive layout (sidebar + content on desktop, stacked on mobile)
+  - [x] Common components: Navbar, Sidebar, Card, Table, Spinner, Toasts
 
 - [ ] API credentials page
   - [ ] View merchant `api_key` (masked by default)

@@ -15,6 +15,7 @@ export const MERCHANT_API_END_POINTS = {
     CREATE: "/api/merchant",
     ME: "/api/merchant/me",
     UPDATE_ME: "/api/merchant/me",
+    CREDENTIALS: "/api/merchant/me/credentials"
 }
 
 export const TRANSACTION_API_END_POINTS = {

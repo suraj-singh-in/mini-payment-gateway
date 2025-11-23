@@ -2,6 +2,7 @@
 import { Router } from "express";
 import { authController } from "../controllers/AuthController";
 import { requireAuth } from "../middleware/requireAuth";
+import { authRateLimiter } from "../middleware/rateLimit";
 
 class AuthRouter {
     private static instance: AuthRouter;
@@ -35,7 +36,7 @@ class AuthRouter {
         );
 
         // POST /api/auth/login
-        this.router.post("/login", (req, res, next) =>
+        this.router.post("/login", authRateLimiter, (req, res, next) =>
             authController.login(req, res, next)
         );
 

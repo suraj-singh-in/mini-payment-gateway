@@ -123,6 +123,34 @@ export class MerchantController {
             next(err);
         }
     }
+
+    @LogRequest({
+        label: "MerchantController.getOwnApiCredentials",
+        // make sure we never log apiKey/apiSecret values
+        extraSensitiveFields: ["apiKey", "apiSecret"]
+    })
+    public async getOwnApiCredentials(
+        req: AuthRequest,
+        res: Response,
+        next: NextFunction
+    ) {
+        try {
+            const user = req.user;
+            if (!user) {
+                return res.status(401).json({ error: "Unauthorized" });
+            }
+
+            const creds = await merchantService.getApiCredentialsForUser(user.id);
+
+            return res.status(200).json({
+                merchant_id: creds.merchantId,
+                business_name: creds.businessName,
+                api_key: creds.apiKey,
+            });
+        } catch (err) {
+            return next(err);
+        }
+    }
 }
 
 export const merchantController = MerchantController.getInstance();

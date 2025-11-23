@@ -3,6 +3,12 @@ import { Types } from "mongoose";
 import { MerchantModel, IMerchant } from "../models/Merchant";
 import { encryptSecret, decryptSecret } from "../security/encryption";
 
+export interface MerchantApiCredentials {
+    apiKey: string;
+    merchantId: string;
+    businessName: string;
+}
+
 export class MerchantService {
     private static instance: MerchantService;
 
@@ -120,6 +126,21 @@ export class MerchantService {
         }
 
         return merchant;
+    }
+
+    public async getApiCredentialsForUser(userId: string): Promise<MerchantApiCredentials> {
+        const merchant = await MerchantModel.findOne({ user_id: userId, status: "active" }).exec();
+
+        if (!merchant) {
+            throw new Error("Active merchant not found for user");
+        }
+
+        return {
+            apiKey: merchant.api_key,
+            merchantId: merchant._id.toString(),
+            businessName: merchant.business_name
+        };
+
     }
 
 }

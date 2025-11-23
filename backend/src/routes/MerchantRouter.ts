@@ -30,9 +30,18 @@ class MerchantRouter {
             merchantController.getMyMerchant(req, res, next)
         );
 
+        // update user
         this.router.patch("/me", requireAuth, (req, res, next) =>
             merchantController.updateMyMerchant(req, res, next)
         );
+
+        // get own api credentials
+        this.router.get(
+            "/me/credentials",
+            requireAuth,
+            (req, res, next) => merchantController.getOwnApiCredentials(req, res, next)
+        );
+
     }
 }
 

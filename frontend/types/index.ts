@@ -24,3 +24,9 @@ export interface MerchantAnalytics {
     last24h: WindowAnalytics;
     last7d: WindowAnalytics;
 }
+
+export interface MerchantApiCredentials {
+    apiKey: string;
+    merchantId: string;
+    businessName: string;
+}

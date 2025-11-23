@@ -3,7 +3,7 @@
 import axios from "axios";
 import { apiUrl, MERCHANT_API_END_POINTS } from "@/lib/url-utils";
 import { FailureResponse, SuccessResponse } from "@/lib/utils";
-import { Merchant, MerchantCredentials } from "@/types";
+import { Merchant, MerchantApiCredentials, MerchantCredentials } from "@/types";
 import { getAuthHeaderFromCookies } from "./utils";
 
 
@@ -88,6 +88,27 @@ async function updateMyMerchant(payload: UpdateMerchantPayload) {
             error?.message ||
             "Failed to update merchant";
         return FailureResponse(error, message);
+    }
+}
+
+
+
+export async function getMerchantCredentials() {
+    try {
+        const headers = await getAuthHeaderFromCookies();
+
+        if (!headers) {
+            return FailureResponse(null, "Not authenticated");
+        }
+
+        const res = await axios.get<MerchantApiCredentials>(apiUrl(MERCHANT_API_END_POINTS.CREDENTIALS), {
+            headers,
+        });
+
+        return SuccessResponse(res.data);
+    } catch (error: any) {
+        console.error("getMerchantCredentials error:", error?.response?.data || error);
+        return FailureResponse(null, "Failed to fetch merchant credentials");
     }
 }
 
